@@ -2,7 +2,7 @@ const express = require('express');
 const app = express()
 const mysql = require('mysql');
 const cors  = require('cors');
-const { encrypt } = require('./encryptionHandler');
+const { encrypt, decrypt } = require('./encryptionHandler');
 
 
 const PORT = 3001;
@@ -34,16 +34,20 @@ app.post(
 
 app.get(
     "/showpasswords",(req,res)=>{
-        db.query("SELECT * from passwords;",(err,result)=>{
-            if(err){
-                console.log(err);
-            }
-            else(
-                res.send(result)
-            );
+        db.query("SELECT * FROM passwords;",(err,result)=>{
+           if(err){
+            console.log(err)
+           }
+           else{
+            res.send(result);
+           }
+            
         })
     }
 )
+app.post("/decryptPassword",(req,res)=>{
+    res.send(decrypt(req.body))
+})
 
 
 app.listen(PORT,()=>{
